@@ -2,7 +2,7 @@
  * Heaven's JS 库
  * @version 1.0.0
  * @author Heaven
- * @description 常用的JS库，原生JS操作;联系方式：lichenbuliren@gmail.com/https://github.com/lichenbuliren
+ * @description 常用的JS库，原生JS操作;联系方式：lichenbuliren@gmail.com || https://github.com/lichenbuliren
  * @return {[type]} [description]
  */
 (function (w, d) {
@@ -51,7 +51,7 @@
              * @return {[type]}           [description]
              */
             getByClass: function (cls, parent) {
-                parent = parent || d;
+                parent = parent || d.body;
                 if (parent.getElementsByClassName) {
                     return parent.getElementsByClassName(cls);
                 } else {
