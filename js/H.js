@@ -82,13 +82,30 @@
             },
 
             /**
+             * 获取给定节点的下一个元素节点
+             * @param  {Object} node Dom元素节点对象
+             * @return {Object}      给定Dom元素的下一个元素节点
+             */
+            getNextElement: function(node){
+                if(node.nodeType == 1){
+                    return node;
+                }
+
+                if(node.nextSibling){
+                    return getNextElement(node.nextSibling);
+                }
+
+                return null;
+            },
+
+            /**
              * 判断dom对象是否包含class类
              * @param  {[type]}  obj [description]
              * @param  {[type]}  cls [description]
              * @return {Boolean}     [description]
              */
             hasClass: function (obj, cls) {
-                return obj.className.match(new RegExp('^|\\s' + cls + '$|\\s', 'i'));
+                return /'^|\\s' + cls + '$|\\s'/i.test(obj.className);
             },
 
             /**
@@ -141,10 +158,46 @@
                 } else {
                     return obj.innerText;
                 }
+            },
+
+            /**
+             * 设置或获取对象的css
+             * @param  {Object} ele     Dom对象
+             * @param  {String} strCss  属性字符串，可以是多个属性组合的字串
+             * @return {[type]}         [description]
+             */
+            setStyle: function(ele,strCss){
+                function endWith(str,suffix){
+                    return str.lastIndexOf(suffix);
+                }
+                var sty = ele.style,
+                    cssText = sty.cssText;
+                if(!endWith(strCss,';')){
+                    cssText += ';';
+                }
+                sty.cssText = cssText + strCss;
+            },
+            clearStyle:function(ele){
+                ele.cssText = '';
             }
         },
 
         Events: {
+            /**
+             * 加载onload方法
+             * @param {[type]} func [description]
+             */
+            addLoadEvent: function(func){
+                var oldonload = window.onload;
+                if(typeof window.onload != 'function'){
+                    window.onload = func;
+                }else{
+                    window.onload = function(){
+                        oldonload();
+                        func();
+                    }
+                }
+            },
             // 添加事件
             addEvent: function (element, type, handler) {
                 if (element.addEventListener) {

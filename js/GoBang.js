@@ -1,6 +1,6 @@
 /**
  * 封装五子棋对象
- * 1、使用二维数组来表示棋盘落子情况，0表示没有落子，1表示落子。
+ * 1、使用二维数组来表示棋盘落子情况，-1表示没有落子，0,1表示落子。
  * 2、落子权重规则：计算落子六个方向（LT,T,RT,RB,B,LB），四格范围内的棋子，
  *    所有权重相加，就是当前棋子的权重值，去权重值最高的点落子。
  * 3、胜负判断：如果落子之后，有五个相连，判断获胜。
@@ -13,11 +13,14 @@
  */
 function GoBang(rows, cols) {
 
-    this.rows = rows || 14;
-    this.cols = cols || 14;
+    this.rows = rows || 15;
+    this.cols = cols || 15;
 
     // 当前下棋手，0代表PC,1代表玩家
     this.currentPlayer = 0;
+
+    // 输赢
+    this.winOrLose = 0;
 
     // 三维数组，用来存储计算机棋型数据
     // computer[this.rows][this.cols][i]
@@ -34,7 +37,7 @@ function GoBang(rows, cols) {
 
     this.moves = [];
 
-    // 棋盘矩阵,0表示无子，1表示白子，2表示黑子
+    // 棋盘矩阵,-1表示无子，0表示白子，1表示黑子
     this.martix = [];
 
     /**
@@ -66,25 +69,25 @@ GoBang.prototype.init = function () {
         }),
         chessBox = '',
         row, cell, count = 0;
-    // 初始化矩阵,绘制背景表格
-    for (var i = 0; i < this.rows; i++) {
-        this.martix[i] = [];
+    //=绘制背景表格
+    var _rows = this.rows - 1,
+        _cols = this.cols - 1;
+    for (var i = 0; i < _rows; i++) {
         row = chessboard.insertRow(0);
-        for (var j = 0; j < this.cols; j++) {
-            this.martix[i][j] = 0;
+        for (var j = 0; j < _cols; j++) {
             cell = row.insertCell(0);
             cell.innerHTML = i + '*' + j;
         }
     }
 
     // 初始化棋盘
-    var _rows = this.rows + 1,
-        _cols = this.cols + 1;
-    for (var i = 0; i < _rows; i++) {
-        for (var j = 0; j < _cols; j++) {
-            chessBox += '<div class="chessBox" data-x="' + j + '" data-y="' + i + '">' + count++ + '</div>'
+    for (var i = 0; i < this.rows; i++) {
+        this.martix[i] = [];
+        for (var j = 0; j < this.cols; j++) {
+            this.martix[i][j] = -1;
+            chessBox += '<div class="chessBox" data-x="' + i + '" data-y="' + j + '"></div>'
         };
     };
-    pieceBox.innerHTML = chessBox;
+    H.Dom.html(pieceBox, chessBox);
     chessboardBox.appendChild(chessboard);
 }
